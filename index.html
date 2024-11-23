@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Timestamp List with Deletion</title>
+  <title>🕒 time since?</title>
   <style>
   @font-face {
     font-family: 'heavitas';
     src: local('heavitas.ttf');
   }
     
-  body {
+    body {
     font-family: heavitas;
     margin: 0;
     padding: 0;
@@ -19,95 +19,127 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f4f4f9;
+    background-color: #111;
   }
 
   .container {
     width: 90%;
     max-width: 600px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: #222;
+    padding: 30px; /* Increased padding for a more spacious layout */
+    border-radius: 12px; /* Slightly rounded corners for better aesthetics */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Ensure padding is included in the total width */
   }
 
   h1 {
-    font-weight: 700; /* Bold */
     font-family: heavitas;
+    color: white;
+    margin-bottom: 20px; /* Spacing below the header */
+    text-align: center; /* Center-align the header */
   }
 
-  p, input, button, select, .timestamp, .time-ago {
-    font-family: heavitas;
-    font-weight: 600; /* Semibold */
+  .form-group {
+    display: flex;
+    flex-direction: column; /* Stacked layout for better responsiveness */
+    gap: 10px; /* Uniform spacing between inputs and button */
+    margin-bottom: 20px; /* Space between form and list */
   }
 
   .form-group input, .form-group button {
-    padding: 10px;
+    padding: 12px; /* Slightly larger padding for a comfortable UI */
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px; /* Consistent border radius */
+    box-sizing: border-box;
   }
 
   .form-group input[type="datetime-local"] {
-    flex: 1;
+    width: 100%; /* Ensure inputs scale well on smaller screens */
   }
 
   .form-group button {
     color: white;
-    background-color: #007bff;
+    background-color: #333;
     border: none;
     cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
   }
 
   .form-group button:hover {
-    background-color: #0056b3;
+    background-color: #444;
+    transform: scale(1.05);
   }
 
   .list-item {
     margin-bottom: 15px;
-    padding: 10px;
+    padding: 15px; /* Increased padding for a cleaner look */
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
     background-color: #f9f9f9;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Align items to the top for better structure */
+    gap: 10px; /* Added spacing between elements */
+  }
+
+  .details {
+    flex-grow: 1; /* Allow text content to take up available space */
   }
 
   .delete-btn {
-    margin-left: 10px;
-    padding: 5px 10px;
+    padding: 8px 12px; /* Adjusted padding for better proportions */
     font-size: 14px;
     color: white;
     background-color: #dc3545;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease;
   }
 
   .delete-btn:hover {
     background-color: #c82333;
+    transform: scale(1.05);
   }
+
+  label {
+    color: white;
+    font-family: heavitas;
+    font-size: 16px;
+    margin-bottom: 10px; /* Spacing below the label */
+    display: block; /* Ensures it aligns properly in smaller screens */
+  }
+
+  select {
+    width: 100%; /* Full width for better responsiveness */
+    padding: 10px; /* Consistent padding */
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 5px; /* Space above the select element */
+  }
+
 </style>
 </head>
 <body>
   <div class="container">
-    <h1>Custom Timestamp List with Deletion</h1>
+    <h1>🕒 time since?</h1>
     <div class="form-group">
       <input type="text" id="textInput" placeholder="Enter text">
       <input type="datetime-local" id="datetimeInput">
-      <button onclick="addItem()">Add</button>
+      <button onclick="addItem()">add</button>
     </div>
     <div id="list"></div>
-    <label for="timeUnit">Time unit:</label>
+    <label for="timeUnit">time unit:</label>
     <select id="timeUnit" onchange="renderList()">
-      <option value="seconds">Seconds</option>
-      <option value="minutes">Minutes</option>
-      <option value="hours">Hours</option>
-      <option value="days">Days</option>
-      <option value="weeks">Weeks</option>
-      <option value="years">Years</option>
-      <option value="decades">Decades</option>
+      <option value="seconds">seconds</option>
+      <option value="minutes">minutes</option>
+      <option value="hours">hours</option>
+      <option value="days">days</option>
+      <option value="weeks">weeks</option>
+      <option value="years">years</option>
+      <option value="decades">decades</option>
     </select>
   </div>
 
@@ -133,11 +165,11 @@
       const timestamp = new Date(datetimeInput.value);
 
       if (!text) {
-        alert("Please enter some text.");
+        alert("⚠️ please enter some text.");
         return;
       }
       if (isNaN(timestamp.getTime())) {
-        alert("Please select a valid date and time.");
+        alert("⚠️ please select a valid date and time.");
         return;
       }
 
@@ -160,10 +192,10 @@
         listItem.innerHTML = `
           <div class="details">
             <p>${item.text}</p>
-            <p class="timestamp">Saved on: ${item.timestamp.toLocaleString()}</p>
-            <p class="time-ago" id="timeAgo-${index}">Time ago: ${timeDiff} ${timeUnit}</p>
+            <p class="timestamp">💾 saved on: ${item.timestamp.toLocaleString()}</p>
+            <p class="time-ago" id="timeAgo-${index}">🕰️ time ago: ${timeDiff} ${timeUnit}</p>
           </div>
-          <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
+          <button class="delete-btn" onclick="deleteItem(${index})">🗑️ delete</button>
         `;
         listElement.appendChild(listItem);
       });
@@ -190,7 +222,7 @@
         const timeDiff = calculateTimeDiff(now, item.timestamp, timeUnit);
         const timeAgoElement = document.getElementById(`timeAgo-${index}`);
         if (timeAgoElement) {
-          timeAgoElement.textContent = `Time ago: ${timeDiff} ${timeUnit}`;
+          timeAgoElement.textContent = `🕰️ time ago: ${timeDiff} ${timeUnit}`;
         }
       });
     }
